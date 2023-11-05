@@ -1,1 +1,2 @@
-# Simulations of stochastic processes![MarkovChain](https://github.com/ArtemLiA/Simulations-of-stochastic-processes/assets/103902271/51960b5e-988e-4804-857e-0e527dedf748)
+# Simulations of stochastic processes
+![out_chain](https://github.com/ArtemLiA/Simulations-of-stochastic-processes/assets/103902271/830abf83-cfc3-4072-b525-673e1ea36de3)
