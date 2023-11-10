@@ -9,7 +9,10 @@ Simulation_series = namedtuple('Simulation_series', ['states', 'times'])
 
 
 class MarkovChain:
-    def __init__(self, initial_probabilities, transition_matrix, states = None) -> None:
+    def __init__(self, 
+                 initial_probabilities: np.array, 
+                 transition_matrix: np.ndarray, 
+                 states: Union[np.array, None] = None) -> None:
         is_square_matrix(transition_matrix)
         is_stochastic_vector(initial_probabilities)
         is_stochastic_matrix(transition_matrix)
@@ -21,7 +24,7 @@ class MarkovChain:
         self._v0 = initial_probabilities
         self._P = transition_matrix
 
-    def _simulate_trajectory(self, t) -> Simulation:
+    def _simulate_trajectory(self, t: int) -> Simulation:
         all_indeces = np.arange(self._states.shape[0])
         current_index = np.random.choice(a=all_indeces, p=self._v0)
 
@@ -35,8 +38,7 @@ class MarkovChain:
         
         return simulation_states
 
-
-    def _simulate_state(self, t):
+    def _simulate_state(self, t: int):
         all_indeces = np.arange(self._states.shape[0])
         current_index = np.random.choice(a=all_indeces, p=self._v0)
 
@@ -46,7 +48,7 @@ class MarkovChain:
         
         return self._states[current_index]
     
-    def simulate_trajectories(self, t, n_simulations = None) -> None:
+    def simulate_trajectories(self, t: int, n_simulations: Union[int, None] = None) -> Union[Simulation, Simulation_series]:
         if n_simulations is None:
             simulation_times = np.arange(0, t+1)
             simulation_states = self._simulate_trajectory(t)
@@ -61,8 +63,7 @@ class MarkovChain:
 
         return Simulation_series(simulations_states, simulations_times)
         
-
-    def simulate_states(self, t, n_simulations = None) -> None:
+    def simulate_states(self, t: int, n_simulations: Union[int, None] = None):
         if n_simulations is None:
             return self._simulate_state(t)
         
@@ -74,7 +75,7 @@ class MarkovChain:
         
         return simulations_states
 
-    def empirical_distribution(self, t, n_simulations = 100) -> dict:
+    def empirical_distribution(self, t: int, n_simulations: int = 100) -> dict:
         simulations_states = self.simulate_states(t=t, n_simulations=n_simulations)
         distribution = dict.fromkeys(self._states, 0)
         
@@ -83,30 +84,30 @@ class MarkovChain:
         
         return {state: count/n_simulations for state, count in distribution.items()}
 
-    def theoretical_distribution(self, t) -> dict:
+    def theoretical_distribution(self, t: int) -> dict:
         probabilities = self._v0 @ np.linalg.matrix_power(self._P, t)
         return dict(zip(self._states, probabilities))
 
-    def get_states(self):
+    def get_states(self) -> np.array:
         return np.copy(self._states)
     
-    def get_transition_matrix(self):
+    def get_transition_matrix(self) -> np.ndarray:
         return np.copy(self._P)
     
-    def get_initial_probabilities(self):
+    def get_initial_probabilities(self) -> np.array:
         return np.copy(self._v0)
     
-    def set_states(self, new_states) -> None:
+    def set_states(self, new_states: Union[np.array, None]) -> None:
         if new_states is not None:
             is_agreed(new_states, self._P)
         self._states = np.array(self._v0.shape[0]) if new_states is None else new_states
     
-    def set_transition_matrix(self, new_transition_matrix) -> None:
+    def set_transition_matrix(self, new_transition_matrix: np.ndarray) -> None:
         is_stochastic_matrix(new_transition_matrix)
         is_agreed(self._v0, new_transition_matrix)
         self._P = new_transition_matrix
     
-    def set_initial_probabilities(self, new_inittial_probabilities) -> None:
+    def set_initial_probabilities(self, new_inittial_probabilities: np.array) -> None:
         is_stochastic_vector(new_inittial_probabilities)
         is_agreed(new_inittial_probabilities, self._P)
         self._v0 = new_inittial_probabilities
