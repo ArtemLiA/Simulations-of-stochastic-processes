@@ -14,3 +14,5 @@ mc.set_initial_probabilities(np.array([0.5, 0.3, 0.2]))
 print("Init probs:", mc.get_initial_probabilities(), sep="\n")
 print("Transition matrix:", mc.get_transition_matrix(), sep="\n")
 print("States:", mc.get_states(), sep="\n")
+
+mc.show_empirical_distribution(5, 1500, 'red', 't=5')
