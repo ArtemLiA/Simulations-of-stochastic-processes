@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from _checks import *
 from collections import namedtuple
 from typing import Union
@@ -97,10 +98,10 @@ class MarkovChain:
     def get_initial_probabilities(self) -> np.array:
         return np.copy(self._v0)
     
-    def set_states(self, new_states: Union[np.array, None]) -> None:
+    def set_states(self, new_states: Union[np.array, None] = None) -> None:
         if new_states is not None:
             is_agreed(new_states, self._P)
-        self._states = np.array(self._v0.shape[0]) if new_states is None else new_states
+        self._states = np.arange(self._v0.shape[0]) + 1 if new_states is None else new_states
     
     def set_transition_matrix(self, new_transition_matrix: np.ndarray) -> None:
         is_stochastic_matrix(new_transition_matrix)
@@ -112,3 +113,25 @@ class MarkovChain:
         is_agreed(new_inittial_probabilities, self._P)
         self._v0 = new_inittial_probabilities
     
+    def show_empirical_distribution(self, t, n_simulations, color, label, show=True):
+        colors = [color] * self._states.shape[0]
+        data = self.empirical_distribution(t=t, n_simulations=n_simulations)
+        
+        plt.bar(list(data.keys()), list(data.values()), label=label, color=colors)
+        plt.xlabel('States')
+        plt.ylabel('Probabilities')
+        if show:
+            plt.legend()
+            plt.show()
+    
+    
+def create_histogram(data, colors, title='Sample cross-section distribution'):
+    """
+    Creating bar by distribution
+    :param data: dict - data
+    """
+    plt.bar(list(data.keys()), list(data.values()), color=colors)
+    plt.xlabel('States')
+    plt.ylabel('Probabilities estimation')
+    plt.title(title)
+    plt.show()
