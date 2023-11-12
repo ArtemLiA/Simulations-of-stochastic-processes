@@ -112,26 +112,3 @@ class MarkovChain:
         is_stochastic_vector(new_inittial_probabilities)
         is_agreed(new_inittial_probabilities, self._P)
         self._v0 = new_inittial_probabilities
-    
-    def show_empirical_distribution(self, t, n_simulations, color, label, show=True):
-        colors = [color] * self._states.shape[0]
-        data = self.empirical_distribution(t=t, n_simulations=n_simulations)
-        
-        plt.bar(list(data.keys()), list(data.values()), label=label, color=colors)
-        plt.xlabel('States')
-        plt.ylabel('Probabilities')
-        if show:
-            plt.legend()
-            plt.show()
-    
-    
-def create_histogram(data, colors, title='Sample cross-section distribution'):
-    """
-    Creating bar by distribution
-    :param data: dict - data
-    """
-    plt.bar(list(data.keys()), list(data.values()), color=colors)
-    plt.xlabel('States')
-    plt.ylabel('Probabilities estimation')
-    plt.title(title)
-    plt.show()
