@@ -54,7 +54,7 @@ def show_distributions(data1: dict, data2: dict, title: str, label1: str = "Firs
     p2 = [nround(item[1], 3) for item in data2.items()]
         
     x = arange(len(states))
-    width = 0.3
+    width = 0.45
     multiplier = 0
     colors = {
         label1: ['red'] * len(states),
