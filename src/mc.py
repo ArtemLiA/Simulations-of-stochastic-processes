@@ -9,6 +9,11 @@ Simulation = namedtuple('Simulation', ['states', 'times'])
 Simulation_series = namedtuple('Simulation_series', ['states', 'times'])
 
 
+def convert_simulation_series(sim_series: Simulation_series):
+    states, times = sim_series.states, sim_series.times
+    return [Simulation(states[i], times) for i in range(states.shape[0])]
+
+
 class MarkovChain:
     def __init__(self, 
                  initial_probabilities: np.array, 
