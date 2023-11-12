@@ -1,10 +1,35 @@
 import matplotlib.pyplot as plt
+
 from numpy import round as nround
 from numpy import arange
+from numpy import linspace
+from numpy import min as nmin
+from numpy import max as nmax
+
 from _checks import ArgumentIncorrectValueError
+from mc import Simulation
 
 
-def show_distribution(data, title, label='Distribution', show=True) -> None:
+def show_trajectory(sim: Simulation, title: str, show: bool = True):
+    states, times = sim.states, sim.times
+    step = 5 if nmax(times) - nmin(times) >= 9 else 5 
+    
+    x_ticks = linspace(nmin(times), nmax(times), step)
+    y_ticks = y_ticks = arange(nmin(states)-2, nmax(states)+3)
+    
+    plt.scatter(times, states, s=50, c='m', label='Simulation states')
+    plt.plot(times, states, 'c')
+    
+    plt.xticks(x_ticks)
+    plt.yticks(y_ticks)
+    
+    plt.title(title)
+    plt.legend()
+    plt.grid(True)
+    if show: plt.show()
+
+
+def show_distribution(data: dict, title: str, label: str = 'Distribution', show: bool = True) -> None:
     x = [str(item[0]) for item in data.items()]
     height = [nround(item[1], 3) for item in data.items()]
     color = ['red'] * len(x)
@@ -19,8 +44,8 @@ def show_distribution(data, title, label='Distribution', show=True) -> None:
     if show: plt.show()
 
 
-def show_distributions(data1, data2, title, label1="First distribution", 
-                       label2="Second distribution", show=True) -> None:
+def show_distributions(data1: dict, data2: dict, title: str, label1: str = "First distribution", 
+                       label2: str = "Second distribution", show: bool = True) -> None:
     if list(data1.keys()) != list(data2.keys()):
         raise ArgumentIncorrectValueError("data1 and data2 have different keys.")
     
